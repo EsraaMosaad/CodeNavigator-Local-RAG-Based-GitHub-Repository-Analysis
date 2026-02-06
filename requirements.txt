@@ -1,0 +1,12 @@
+streamlit
+langchain
+langchain-community
+langchain-chroma
+langchain-huggingface
+GitPython
+python-dotenv
+sentence-transformers
+chromadb
+fastembed
+pysqlite3-binary
+requests
