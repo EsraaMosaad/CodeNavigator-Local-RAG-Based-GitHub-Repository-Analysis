@@ -2,3 +2,5 @@
 /TECH_STACK.md
 /temp_repos
 /vector_stores
+__pycache__/
+*.pyc
