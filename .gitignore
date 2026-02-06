@@ -3,4 +3,4 @@
 /temp_repos
 /vector_stores
 /__pycache__
-/*.pyc
+*.pyc
