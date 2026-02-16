@@ -37,7 +37,7 @@ loader = GitLoader()
 parser = PythonParser()
 embeddings_manager = HFEmbeddings()
 vector_manager = ChromaManager()
-llm_manager = OllamaModel()
+llm_manager = OllamaModel(model_name="codellama")
 
 with st.sidebar:
     st.header("Settings")
