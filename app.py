@@ -57,6 +57,7 @@ with st.sidebar:
             # 1. Load (with deduplication check)
             st.write("Checking repository...")
             repo_path = loader.load(repo_url, "temp_repos")
+            st.session_state.repo_path = repo_path
             
             # 2. Check if already processed in vector store
             st.write("Checking vector store...")
@@ -83,7 +84,16 @@ with st.sidebar:
 if "messages" not in st.session_state: st.session_state.messages = []
 
 if st.session_state.get("processed"):
-    pipeline = RAGPipeline(llm_manager.get_llm(), st.session_state.vector_store.as_retriever())
+    # Ensure branches are loaded for context
+    if "branches" not in st.session_state:
+        st.session_state.branches = loader.get_branches(st.session_state.repo_path)
+    
+    repo_context = {
+        "Repository Name": st.session_state.repo_name,
+        "Available Branches": ", ".join(st.session_state.branches) if st.session_state.branches else "Unknown"
+    }
+
+    pipeline = RAGPipeline(llm_manager.get_llm(), st.session_state.vector_store.as_retriever(), repo_context)
     
     st.subheader(f"Analyzing: {st.session_state.repo_name}")
     
@@ -113,13 +123,49 @@ if st.session_state.get("processed"):
                 st.rerun()
 
     with col4:
-        with st.popover("🔍 Code Diff"):
-            diff_text = st.text_area("Paste external code to compare:")
-            if st.button("Run Diff Analysis"):
-                with st.spinner("Analyzing Diff..."):
-                    ans, src = pipeline.query_specialized("diff", diff_text)
-                    st.session_state.messages.append({"role": "assistant", "content": ans, "sources": src})
-                    st.rerun()
+        with st.popover("🔀 Branch Diff"):
+            if "repo_path" not in st.session_state:
+                st.error("Repository path not found. Please reload.")
+            else:
+                # Get branches (cached)
+                if "branches" not in st.session_state:
+                    with st.spinner("Fetching branches..."):
+                        st.session_state.branches = loader.get_branches(st.session_state.repo_path)
+                
+                branches = st.session_state.branches
+                
+                if not branches or "Error" in branches[0]:
+                    st.error(f"Could not fetch branches: {branches}")
+                    if st.button("Retry Fetch"):
+                        del st.session_state.branches
+                        st.rerun()
+                else:
+                    col_a, col_b = st.columns(2)
+                    with col_a:
+                        branch_a = st.selectbox("Base Branch", branches, index=0)
+                    with col_b:
+                        # Try to find a different branch for the second default
+                        default_index = 1 if len(branches) > 1 else 0
+                        branch_b = st.selectbox("Target Branch", branches, index=default_index)
+                    
+                    if st.button("Analyze Branch Diff"):
+                        if branch_a == branch_b:
+                            st.warning("Please select different branches.")
+                        else:
+                            with st.spinner(f"Computing diff between {branch_a} and {branch_b}..."):
+                                # 1. Get the raw git diff text
+                                raw_diff = loader.get_diff(st.session_state.repo_path, branch_a, branch_b)
+                                
+                                # 2. Limit diff size to avoid context overflow (e.g., 2000 chars)
+                                if len(raw_diff) > 5000:
+                                    display_diff = raw_diff[:5000] + "\n...(truncated due to length)..."
+                                else:
+                                    display_diff = raw_diff
+
+                                # 3. Send to LLM
+                                ans, src = pipeline.query_specialized("diff", display_diff)
+                                st.session_state.messages.append({"role": "assistant", "content": ans, "sources": []})  # No sources for diff usually
+                                st.rerun()
     
     st.divider()
     

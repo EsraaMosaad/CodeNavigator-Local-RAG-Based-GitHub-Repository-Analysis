@@ -1,70 +1,100 @@
-# Comparative Study 2: Dataset Evaluation for Generative AI
+# Assignment-2: Dataset Evaluation
+
+**Course:** CSAI810  
+**Student Names:** Esraa Abdelrazek & Nancy Abdo  
+**Date:** 16th February 2026
+
+---
 
 ## 1. Introduction
-This study evaluates three distinct datasets used in the training, fine-tuning, or evaluation of Generative AI models for code. Understanding these datasets is critical for our RAG project, as the quality of our local model's (DeepSeek-Coder) output depends entirely on the data it was trained on and the benchmarks used to verify it. We examine a massive training corpus, an instruction-tuning dataset, and an evaluation benchmark.
+In this study, we evaluate three datasets that are fundamental to how code-generating AI models work. Since our project relies on a model (DeepSeek) to understand and fix code, it is important for us to know what kind of data it was trained on. We looked at a training dataset, a fine-tuning dataset, and an evaluation benchmark.
+
+---
 
 ## 2. Selected Datasets
 
-### Dataset A: The Stack v2 (Training)
-*   **Content & Modality**: A massive dataset of source code in over 600 programming languages, collected from public GitHub repositories.
-*   **Intended Task**: Pre-training Large Language Models (LLMs) for code generation and understanding.
-*   **Size**: Over 3 billion files, roughly 67 TB of data.
-*   **Creator**: BigCode Project (Hugging Face, ServiceNow).
-*   **Example**: A full Python file `utils.py` from a public repository containing helper functions for data processing.
-
-### Dataset B: CommitPackFT (Fine-tuning)
-*   **Content & Modality**: A filtered dataset of high-quality commit messages and their associated code changes (diffs) across hundreds of programming languages.
-*   **Intended Task**: Instruction fine-tuning models to understand code evolution, Git commit formatting, and describing code changes.
-*   **Size**: Approximately 2TB of commit data, filtered down to high-quality subsets for instruction tuning.
+### Dataset 1: The Stack v2 (Training)
+*   **Content**: A massive collection of source code in 600+ languages from GitHub.
+*   **Intended Task**: Pre-training LLMs to understand code syntax and structure.
+*   **Size**: ~67 TB of data (3 billion+ files).
 *   **Creator**: BigCode Project.
-*   **Example**: A git commit message "Fix null pointer exception in login logic" paired with the specific lines of code changed to fix the bug.
+*   **Link**: [Hugging Face Dataset](https://huggingface.co/datasets/bigcode/the-stack-v2)
+*   **Example**: A raw `main.py` file from a public repository.
 
-### Dataset C: HumanEval (Evaluation)
-*   **Content & Modality**: A set of 164 hand-written Python programming problems.
-*   **Intended Task**: Evaluating the functional correctness of code generation models.
-*   **Size**: Small (164 problems).
+### Dataset 2: CommitPackFT (Fine-tuning)
+*   **Content**: "Before and After" code changes (Diffs) paired with commit messages.
+*   **Intended Task**: Teaching models how to edit code and describe changes (Instruction Tuning).
+*   **Size**: ~2TB of filtered commit history.
+*   **Creator**: BigCode Project.
+*   **Link**: [Hugging Face Dataset](https://huggingface.co/datasets/bigcode/commitpackft)
+*   **Example**: Input: "Fix bug in login", Output: The specific lines of code changed.
+
+### Dataset 3: HumanEval (Evaluation)
+*   **Content**: 164 hand-written Python coding problems.
+*   **Intended Task**: Testing if a model can write correct code from a description.
+*   **Size**: Small (164 items).
 *   **Creator**: OpenAI.
-*   **Example**: A function signature `def unique_elements(l: list):` with a docstring describing the desired output, where the model must complete the function body.
+*   **Link**: [GitHub Repository](https://github.com/openai/human-eval)
+*   **Example**: `def sum_list(l):` -> Model must write the code to sum the list.
+
+---
 
 ## 3. Evaluation Criteria Definition
 
-1.  **Task Relevance & Alignment**
-    *   **What it measures**: How closely the dataset matches the downstream task (e.g., repository analysis vs. function completion).
-    *   **Assessment**: Qualitative. Does the data look like the inputs/outputs our RAG app will handle?
+We used these criteria to see if the datasets are good for building our RAG tool.
 
-2.  **Data Quality & Filtering (PII/Deduplication)**
-    *   **What it measures**: The rigorousness of the cleaning process to remove Personal Identifiable Information (PII), malicious code, and duplicate entries.
-    *   **Why it matters**: Dirty data leads to insecure models that may leak private keys or generate vulnerable code.
+1.  **Task Relevance**
+    *   **What it measures**: Does the data look like the real work our tool will do?
+    *   **How it is assessed**: Qualitative (Comparing dataset samples to our RAG inputs).
+    
+2.  **Data Quality (PII Filtering)**
+    *   **What it measures**: Is personal info (emails, passwords) removed?
+    *   **How it is assessed**: Qualitative (Reviewing the cleaning steps used by creators).
+    *   **Why it matters**: We don't want our model leaking private data.
 
-3.  **Opt-Out & Licensing Mechanisms**
-    *   **What it measures**: The presence of mechanisms for developers to remove their code from the dataset.
-    *   **Why it matters**: Ethical AI development requires respecting copyright and developer consent (e.g., "Am I training on code I shouldn't be?").
+3.  **Opt-Out Mechanisms**
+    *   **What it measures**: Can developers remove their code from the set?
+    *   **How it is assessed**: Qualitative (Checking for "Am I in the stack" tools).
+    *   **Why it matters**: It is about ethical AI usage.
 
 4.  **Scale & Diversity**
-    *   **What it measures**: The total volume of tokens and the variety of programming languages/paradigms covered.
-    *   **Why it matters**: Larger, more diverse datasets prevent overfitting and allow models to generalize to unseen coding patterns.
+    *   **What it measures**: How many languages and scenarios are covered?
+    *   **How it is assessed**: Quantitative (Number of languages/files).
 
-5.  **Temporal Relevance (Freshness)**
-    *   **What it measures**: The cutoff date of the data.
-    *   **Why it matters**: Code libraries change rapidly. Old datasets train models on deprecated APIs (e.g., pandas 1.0 vs 2.0), causing hallucinations in modern projects.
+5.  **Freshness (Temporal Relevance)**
+    *   **What it measures**: How new is the code?
+    *   **How it is assessed**: Quantitative (Cutoff date).
+    *   **Why it matters**: Old data means the model won't know new Python features.
 
-6.  **Sparsity & Complexity**
-    *   **What it measures**: Whether the data contains complex, multi-file projects or just simple one-liners.
-    *   **Why it matters**: Our project analyzes whole repositories. Models trained only on simple snippets (like HumanEval) often fail to understand broad system architecture.
+6.  **Complexity**
+    *   **What it measures**: Are the samples simple scripts or full projects?
+    *   **How it is assessed**: Qualitative (Average file size/structure).
+
+---
 
 ## 4. Comparative Table
 
-| Evaluation Criterion | The Stack v2 (Training) | CommitPackFT (Fine-tuning) | HumanEval (Evaluation) |
+| Evaluation Criterion | The Stack v2 | CommitPackFT | HumanEval |
 | :--- | :--- | :--- | :--- |
-| **1. Task Relevance** | **High (Repository Analysis)**. Contains full file contexts and repository structures, perfectly matching our RAG system's goal of analyzing complete files. | **High (Git Analysis)**. Directly relevant to our project's "Generate Issues" and "Code Diff" features, as it teaches models how code changes over time. | **Moderate (Unit Level)**. Good for checking if the model can write Python syntax, but lacks the file-level context needed for complex RAG tasks. |
-| **2. Data Quality & Filtering** | **State-of-the-art**. Uses "Near-deduplication" and rigorous PII screening (removing emails/IPs) to ensure the training data is clean and safe. | **High**. specifically filters for "high quality" commit messages (e.g., distinct, descriptive messages) to prevent training on "fixed typo" style useless commits. | **High (Manual)**. Hand-crafted by researchers to ensure correctness, ensuring no "noise" interferes with the evaluation metric. |
-| **3. Licensing & Opt-out** | **Excellent**. First dataset to implement a robust "Am I in The Stack?" tool, allowing developers to opt-out. Respects permissive licenses. | **Good**. Inherits rigorous licensing filtering from The Stack, focusing on permissively licensed repositories. | **Proprietary/Open**. The benchmark itself is open (MIT), but it doesn't involve "user content," so opt-out isn't applicable in the same way. |
-| **4. Scale & Diversity** | **Massive**. COvers 600+ languages. This ensures the model understands not just Python, but the Dockerfiles and JSON configs often found alongside it. | **Large but Focused**. Billions of tokens, but strictly focused on the *changes* (diffs), limiting its diversity compared to full source files. | **Tiny**. Only 164 problems. While a standard, it is too small to capture the full diversity of real-world software engineering. |
-| **5. Temporal Relevance** | **Variable**. Captures a snapshot of GitHub at a specific time. Requires regular re-scraping to stay current with new library versions. | **Variable**. Depends on the snapshot date. Older commits may reference deprecated coding practices or fixed security vulnerabilities. | **Static**. Created around 2021. It does not test knowledge of newer libraries or Python 3.10+ features (like pattern matching). |
-| **6. Sparsity & Complexity** | **High Complexity**. Contains entire repositories, allowing models to learn cross-file dependencies (e.g., imports). | **Medium Complexity**. Focuses on the "before" and "after" implementation of a specific feature, teaching logic flow but not full architecture. | **Low Complexity**. Problems are self-contained functions. Evaluating on this alone doesn't guarantee a model can build a full app. |
+| **1. Task Relevance** | **High**. It contains full files, which is exactly what our RAG system analyzes. | **High (for Diffs)**. This data teaches the model how to suggest fixes and generate issues, which is a key feature of our app. | **Moderate**. It only checks function-level logic, not full project understanding. |
+| **2. Data Quality** | **Excellent**. Uses advanced filtering to remove PII and duplicate code. | **High**. Filters for "high quality" commit messages to avoid "fix typo" spam. | **High**. Manually created by humans, so it is 100% clean. |
+| **3. Opt-Out** | **Yes**. Has a specific tool for developers to remove their code. | **Yes**. Follows the same ethical standards as The Stack. | **N/A**. It is a benchmark, not user data. |
+| **4. Scale** | **Massive**. Covers almost every language on GitHub. | **Large**. Billions of tokens, but limited to code *changes*. | **Tiny**. Only 164 problems. Too small to learn from, only for testing. |
+| **5. Freshness** | **Variable**. Depends on when the snapshot was taken. | **Variable**. Needs regular updates to catch new coding patterns. | **Static**. Created in 2021. It does not know about Python 3.12 updates. |
+| **6. Complexity** | **High**. Includes complex, multi-file projects. | **Medium**. Focuses on the logic of a single change/edit. | **Low**. Isolated functions only. |
+
+---
 
 ## 5. Discussion
-For our project, understanding these datasets reveals the strengths and limitations of our tools:
-*   **The Stack v2** is the powerhouse that gives our DeepSeek model its broad knowledge of Python and GitHub structures. Its PII filtering is crucial for our "privacy-first" claim.
-*   **CommitPackFT** is likely what gives DeepSeek its ability to explain *changes* or suggest refactors, which is a key feature of our app.
-*   **HumanEval**, while famous, is a limited metric. High HumanEval scores (which DeepSeek has) tell us the model knows Python syntax well, but we shouldn't rely on it to prove the model can understand a complex 100-file repository. We must rely on our own RAG testing for that.
+For our project, we learned that:
+*   **The Stack v2** is the most important dataset because it gives our model the broad knowledge to read any Python file we upload.
+*   **CommitPackFT** is likely why DeepSeek is so good at our "Code Diff" and "Generate Issues" features—it was trained on how developers actually fix bugs.
+*   **HumanEval** is good for a quick score, but we cannot rely on it alone to judge if the model handles our complex RAG tasks.
+
+---
+
+## 6. References
+1.  **The Stack v2**: Lozhkov, A., et al. (2024). *StarCoder 2 and The Stack v2*. Hugging Face.
+2.  **CommitPackFT**: Muennighoff, N., et al. (2023). *OctoPack: Instruction Tuning Code LLMs*.
+3.  **HumanEval**: OpenAI. (2021). *Evaluating Large Language Models Trained on Code*.
+4.  **BigCode Project**: [https://www.bigcode-project.org/](https://www.bigcode-project.org/)

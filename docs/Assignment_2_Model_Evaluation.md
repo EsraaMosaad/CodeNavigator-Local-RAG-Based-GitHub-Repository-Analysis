@@ -1,67 +1,88 @@
-# Comparative Study 1: Generative AI Model Evaluation
+# Assignment-2: Model Evaluation
+
+**Course:** CSAI810  
+**Student Names:** Esraa Abdelrazek & Nancy Abdo  
+**Date:** 16th February 2026
+
+---
 
 ## 1. Introduction
-This comparative study evaluates three state-of-the-art Generative AI models for use in our "Local RAG-Based GitHub Code Analyzer" project. The primary goal of our project is to analyze Python repositories, generate meaningful GitHub issues, and visualize code architecture locally, prioritizing user privacy and cost-efficiency. This evaluation assesses the suitability of each model against key criteria such as coding capability, inference speed, and privacy.
+The objective of this study is to compare and evaluate three Generative AI models that could realistically be used in our **Local RAG-Based GitHub Code Analyzer**. Our project focuses on analyzing Python repositories to generate issues and explain code logic while running entirely on local hardware (privacy-first). We selected models based on their coding capabilities, inference speed, and license suitability for our academic project.
+
+---
 
 ## 2. Selected Generative AI Models
 
-### Model A: DeepSeek-Coder-V2-Lite-Instruct
-*   **Purpose & Capabilities**: A specialized code generation model designed to excel in programming tasks. It supports over 300 programming languages and is optimized for code completion, bug fixing, and repository-level understanding.
+### Model 1: DeepSeek-Coder-V2-Lite
+*   **Purpose & Capabilities**: This is a specialized model trained specifically for code generation and understanding. It supports over 300 programming languages and is optimized for tasks like bug fixing and repository analysis.
 *   **Developer**: DeepSeek AI.
-*   **Access Method**: Open Weights (available via Ollama for local inference).
+*   **Access Method**: Open Weights (We access it via Ollama).
 
-### Model B: Llama-3.1-8B-Instruct
-*   **Purpose & Capabilities**: A robust, general-purpose instruction-tuned model. while not exclusively for code, it demonstrates strong reasoning and coding abilities, making it a versatile choice for mixed natural language and code tasks.
+### Model 2: Llama-3.1-8B-Instruct
+*   **Purpose & Capabilities**: A widely used general-purpose LLM. While not exclusively for code, it has strong reasoning abilities and is often used as a baseline for local RAG applications due to its speed and instruction-following skills.
 *   **Developer**: Meta (Facebook) AI.
-*   **Access Method**: Open Weights (available via Ollama for local inference).
+*   **Access Method**: Open Weights (We access it via Ollama).
 
-### Model C: GPT-4o ("Omni")
-*   **Purpose & Capabilities**: A flagship multimodal frontier model with state-of-the-art reasoning, coding, and instruction-following capabilities. It serves as a benchmark for performance but requires an internet connection.
+### Model 3: GPT-4o ("Omni")
+*   **Purpose & Capabilities**: A proprietary frontier model. It represents the "state-of-the-art" benchmark for reasoning and coding but requires a cloud connection. We included it to see what is possible with unlimited resources.
 *   **Developer**: OpenAI.
 *   **Access Method**: Proprietary API (Cloud-based).
 
+---
+
 ## 3. Evaluation Criteria Definition
 
-1.  **Code Generation Accuracy (HumanEval/MBPP Pass@1)**
-    *   **What it measures**: The percentage of coding problems the model solves correctly on the first attempt using standard benchmarks like HumanEval.
-    *   **Assessment**: Quantitative metrics from technical reports (e.g., HumanEval score > 70%).
+We defined six criteria to judge which model is best for our specific constraints (local execution, privacy, and code accuracy).
 
+1.  **Code Generation Accuracy (HumanEval Score)**
+    *   **What it measures**: The percentage of Python coding problems the model solves correctly on the first try.
+    *   **How it is assessed**: Quantitative (Technical reports from DeepSeek/Meta).
+    
 2.  **Context Window Size**
-    *   **What it measures**: The maximum number of tokens (text/code) the model can process in a single prompt.
-    *   **Assessment**: Quantitative (e.g., 8k, 128k tokens). A larger window allows analyzing entire files or multiple modules simultaneously.
+    *   **What it measures**: How much code (in tokens) we can feed the model at once.
+    *   **How it is assessed**: Quantitative (e.g., 8k vs 128k tokens). This is critical for reading large files.
 
-3.  **Inference Speed & Latency (Tokens/Second)**
-    *   **What it measures**: How quickly the model generates text.
-    *   **Assessment**: Quantitative/Qualitative. Critical for a responsive local Streamlit application where users expect near-instant feedback.
+3.  **Inference Speed (Local)**
+    *   **What it measures**: The tokens-per-second generation speed on our laptop.
+    *   **How it is assessed**: Qualitative (Fast/Slow experience during testing).
 
-4.  **Data Privacy & Security**
-    *   **What it measures**: Whether user data (proprietary code) leaves the local environment.
-    *   **Assessment**: Qualitative (Local/Air-gapped vs. Cloud Transmission). Our project emphasizes "privacy-first".
+4.  **Data Privacy**
+    *   **What it measures**: Whether the code we analyze leaves our machine.
+    *   **How it is assessed**: Qualitative (Local execution vs Cloud API).
 
-5.  **Instruction Following & Structured Output**
-    *   **What it measures**: The ability to follow complex formatting instructions, such as generating valid JSON for API responses or specific Mermaid.js syntax for diagrams.
-    *   **Assessment**: Qualitative user testing (Correct format vs. needing retries).
+5.  **Instruction Following**
+    *   **What it measures**: Can the model correctly format output (e.g., Mermaid.js diagrams) without errors?
+    *   **How it is assessed**: Qualitative (Testing diagram generation).
 
-6.  **Deployment Cost & Hardware Requirements**
-    *   **What it measures**: The operational cost (API fees) and hardware constraints (RAM/VRAM) required to run the model.
-    *   **Assessment**: Quantitative (Free/$ per token) and Qualitative (Requires High-End GPU vs. Consumer CPU).
+6.  **Cost**
+    *   **What it measures**: The price to run the model for a full repository scan.
+    *   **How it is assessed**: Quantitative (Free vs Pay-per-token).
+
+---
 
 ## 4. Comparative Table
 
 | Evaluation Criterion | DeepSeek-Coder-V2-Lite | Llama-3.1-8B-Instruct | GPT-4o (OpenAI) |
 | :--- | :--- | :--- | :--- |
-| **1. Code Generation Accuracy** | **Excellent**. Specifically trained on massive code datasets, it achieves scores rivaling larger proprietary models on HumanEval, making it highly reliable for generating Python classes and bug fixes. | **Good**. Performs well on basic to intermediate coding tasks but may hallucinate obscure libraries or syntax more often than specialized code models. | **Superior**. Currently holds state-of-the-art performance benchmarks, handling complex architectural reasoning and edge cases better than smaller open models. |
-| **2. Context Window** | **Large (up to 128k)**. Can ingest significant portions of a repository or long documentation files without truncation, which is crucial for RAG. | **Standard (128k)**. Also supports a large context window, allowing for extensive file analysis, though effective utilization at the limit may vary. | **Massive (128k)**. Proven capability to handle very large contexts with high retrieval accuracy, ensuring comprehensive analysis of large files. |
-| **3. Inference Speed (Local)** | **Fast**. As a "Lite" model (approx 16B active params via MoE or scaled down), it runs efficiently on consumer hardware (e.g., 16GB RAM laptops) via Ollama. | **Very Fast**. The 8B parameter size is highly optimized for consumer hardware, offering the fastest token generation rates for real-time chat. | **Variable (Network Dependent)**. Speed depends on API latency and internet connection. It is generally fast but introduces network overhead not present in local models. |
-| **4. Data Privacy** | **High (Local)**. Runs entirely on the user's machine via Ollama. No code is sent to external servers, meeting our strict privacy requirement. | **High (Local)**. Like DeepSeek, it runs locally. Complete data sovereignty is maintained. | **Low (Cloud)**. Requires sending potentially sensitive code to OpenAI servers. This violates the "privacy-first" goal unless Enterprise agreements are in place. |
-| **5. Instruction Following** | **Strong**. Fine-tuned for technical instructions, it excels at generating structured outputs like Mermaid diagrams or strictly formatted code blocks. | **Very Strong**. Llama 3.1 is renowned for its improved instruction following, making it excellent for strictly formatted JSON outputs or "chatty" explanations. | **State-of-the-art**. Extremely reliable at following complex, multi-step instructions and formatting requirements without needing few-shot examples. |
-| **6. Cost & Hardware** | **Free (Local)**. Requires decent RAM (approx 16-24GB for full 4-bit quantization). No per-token cost. | **Free (Local)**. Very accessible, running comfortably on 8GB-16GB RAM machines. No per-token cost. | **Paid (API)**. Pay-per-token model. While individual queries are cheap, analyzing entire repositories repeatedly can become expensive quickly. |
+| **1. Code Accuracy** | **Excellent**. Trained on massive code datasets, it rivals larger models in Python generation. | **Good**. Solid reasoning, but sometimes makes up non-existent libraries compared to DeepSeek. | **Superior**. The current industry leader, handling complex logic and edge cases perfectly. |
+| **2. Context Window** | **128k Tokens**. Large enough to fit multiple Python files for cross-reference. | **128k Tokens**. Same capacity, good for RAG retrieval contexts. | **128k Tokens**. Extremely reliable retrieval over long contexts. |
+| **3. Inference Speed** | **Fast**. Specialized "Lite" architecture makes it run smoothly on our local machine. | **Very Fast**. The 8B model is highly optimized for consumer hardware. | **Variable**. Depends on internet speed. Often fast, but adds network latency. |
+| **4. Data Privacy** | **High (Local)**. No data leaves our laptop. Perfect for our privacy goal. | **High (Local)**. Runs locally, ensuring total data sovereignty. | **Low (Cloud)**. Sends code to OpenAI servers, violating our privacy requirement. |
+| **5. Instruction Following** | **Strong**. Excells at following technical formats like JSON or Mermaid diagrams. | **Very Strong**. Very good at "chatty" responses and strict formatting. | **State-of-the-art**. Almost never fails to follow formatting rules. |
+| **6. Cost** | **Free**. Uses our local RAM. | **Free**. Uses our local RAM. | **Paid**. Costs money per request, which gets expensive for large repos. |
+
+---
 
 ## 5. Discussion & Recommendation
-Based on the comparative evaluation, **DeepSeek-Coder-V2-Lite** is the most suitable model for our project.
+We decided to use **DeepSeek-Coder-V2-Lite** for our project.
 
-1.  **Alignment with Goals**: It is a specialized *code* model, offering superior performance on Python analysis tasks compared to generalist models of similar size like Llama-3.
-2.  **Privacy**: It runs locally via Ollama, satisfying our core "privacy-first" constraint which disqualifies GPT-4o for this specific use case.
-3.  **Feasibility**: It strikes the best balance between performance (context window, coding score) and hardware requirements, running effectively on standard development laptops without incurring API costs.
+*   **Why?**: It is the best balance for us. It is free and private (running on Ollama), which was our main requirement.
+*   **Trade-off**: While GPT-4o is smarter, we cannot use it because we want a "privacy-first" tool. Llama-3.1 is good, but DeepSeek is specifically trained for code, meaning it gives better explanations for the complex Python logic we are analyzing.
 
-While GPT-4o offers the highest raw intelligence, the privacy and cost trade-offs make it unsuitable for a local, open-source demonstration. Llama-3.1 is a strong runner-up but lacks the specific code-training depth of DeepSeek.
+---
+
+## 6. References
+1.  **DeepSeek-Coder-V2**: DeepSeek-AI. (2024). *DeepSeek-Coder-V2: Breaking the Barrier of Closed-Source Models in Code Intelligence*. arXiv preprint arXiv:2406.11931.
+2.  **Llama 3.1**: Meta AI. (2024). *The Llama 3 Herd of Models*. Meta AI Research.
+3.  **GPT-4o**: OpenAI. (2024). *Hello GPT-4o*. OpenAI Blog.
+4.  **HumanEval Benchmark**: Chen, M., et al. (2021). *Evaluating Large Language Models Trained on Code*. arXiv.
