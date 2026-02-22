@@ -74,10 +74,10 @@ We defined six criteria to judge which model is best for our specific constraint
 ---
 
 ## 5. Discussion & Recommendation
-We decided to use **DeepSeek-Coder-V2-Lite** for our project.
+We plan to use **DeepSeek-Coder-V2-Lite** for our project.
 
-*   **Why?**: It is the best balance for us. It is free and private (running on Ollama), which was our main requirement.
-*   **Trade-off**: While GPT-4o is smarter, we cannot use it because we want a "privacy-first" tool. Llama-3.1 is good, but DeepSeek is specifically trained for code, meaning it gives better explanations for the complex Python logic we are analyzing.
+*   **Why?**: It appears to be the best balance for us. It is free and private (running on Ollama), which is our main requirement.
+*   **Trade-off**: While GPT-4o is smarter, we cannot use it because we want a "privacy-first" tool. Llama-3.1 is good, but DeepSeek is specifically trained for code, meaning it should give better explanations for the complex Python logic we plan to analyze.
 
 ---
 
