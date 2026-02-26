@@ -1,0 +1,222 @@
+nohup: ignoring input
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://192.168.44.132:8501
+
+Repository RAG-Based-GitHub-Code-Analyzer already exists at temp_repos/RAG-Based-GitHub-Code-Analyzer. Skipping clone.
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state.py[0m:469 in __getitem__                                                     [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state.py[0m:517 in _getitem                                                        [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mKeyError[0m
+
+[3mDuring handling of the above exception, another exception occurred:[0m
+
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state_proxy.py[0m:130 in __getattr__                                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state_proxy.py[0m:101 in __getitem__                                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1msaf[0m [31m [0m
+[31m [0m [1me_session_state.py[0m:104 in __getitem__                                                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state.py[0m:471 in __getitem__                                                     [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mKeyError: [0m[32m'st.session_state has no key "messages". Did you forget to initialize it? More[0m
+[32minfo: [0m
+[32mhttps://docs.streamlit.io/develop/concepts/architecture/session-state#initialization'[0m
+
+[3mDuring handling of the above exception, another exception occurred:[0m
+
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/scriptrun[0m [31m [0m
+[31m [0m [2mner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling                                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/scriptrun[0m [31m [0m
+[31m [0m [2mner/[0m[1mscript_runner.py[0m:669 in code_to_exec                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/Projects/try_1/[0m[1mapp.py[0m:232 in <module>                          [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m229 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m   [2m230 [0m[2m│   [0m[2m# Chat Display[0m                                                             [31m [0m
+[31m [0m   [2m231 [0m[2m│   [0mst.divider()                                                               [31m [0m
+[31m [0m [31m❱ [0m232 [2m│   [0m[94mfor[0m msg [95min[0m st.session_state.messages:                                      [31m [0m
+[31m [0m   [2m233 [0m[2m│   │   [0m[94mwith[0m st.chat_message(msg[[33m"[0m[33mrole[0m[33m"[0m]):                                     [31m [0m
+[31m [0m   [2m234 [0m[2m│   │   │   [0m[94mif[0m msg.get([33m"[0m[33mdiagram_html[0m[33m"[0m):                                        [31m [0m
+[31m [0m   [2m235 [0m[2m│   │   │   │   [0mcomponents.html(msg[[33m"[0m[33mdiagram_html[0m[33m"[0m], height=[94m750[0m, scrolling=[94mTru[0m [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state_proxy.py[0m:132 in __getattr__                                               [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mAttributeError: [0mst.session_state has no attribute [32m"messages"[0m. Did you forget to 
+initialize it? More info: 
+[4;94mhttps://docs.streamlit.io/develop/concepts/architecture/session-state#initialization[0m
+Repository RAG-Based-GitHub-Code-Analyzer already exists at temp_repos/RAG-Based-GitHub-Code-Analyzer. Skipping clone.
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state.py[0m:469 in __getitem__                                                     [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state.py[0m:517 in _getitem                                                        [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mKeyError[0m
+
+[3mDuring handling of the above exception, another exception occurred:[0m
+
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state_proxy.py[0m:130 in __getattr__                                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state_proxy.py[0m:101 in __getitem__                                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1msaf[0m [31m [0m
+[31m [0m [1me_session_state.py[0m:104 in __getitem__                                                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state.py[0m:471 in __getitem__                                                     [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mKeyError: [0m[32m'st.session_state has no key "messages". Did you forget to initialize it? More[0m
+[32minfo: [0m
+[32mhttps://docs.streamlit.io/develop/concepts/architecture/session-state#initialization'[0m
+
+[3mDuring handling of the above exception, another exception occurred:[0m
+
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/scriptrun[0m [31m [0m
+[31m [0m [2mner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling                                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/scriptrun[0m [31m [0m
+[31m [0m [2mner/[0m[1mscript_runner.py[0m:669 in code_to_exec                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/Projects/try_1/[0m[1mapp.py[0m:232 in <module>                          [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m229 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m   [2m230 [0m[2m│   [0m[2m# Chat Display[0m                                                             [31m [0m
+[31m [0m   [2m231 [0m[2m│   [0mst.divider()                                                               [31m [0m
+[31m [0m [31m❱ [0m232 [2m│   [0m[94mfor[0m msg [95min[0m st.session_state.messages:                                      [31m [0m
+[31m [0m   [2m233 [0m[2m│   │   [0m[94mwith[0m st.chat_message(msg[[33m"[0m[33mrole[0m[33m"[0m]):                                     [31m [0m
+[31m [0m   [2m234 [0m[2m│   │   │   [0m[94mif[0m msg.get([33m"[0m[33mdiagram_html[0m[33m"[0m):                                        [31m [0m
+[31m [0m   [2m235 [0m[2m│   │   │   │   [0mcomponents.html(msg[[33m"[0m[33mdiagram_html[0m[33m"[0m], height=[94m750[0m, scrolling=[94mTru[0m [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state_proxy.py[0m:132 in __getattr__                                               [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mAttributeError: [0mst.session_state has no attribute [32m"messages"[0m. Did you forget to 
+initialize it? More info: 
+[4;94mhttps://docs.streamlit.io/develop/concepts/architecture/session-state#initialization[0m
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state.py[0m:469 in __getitem__                                                     [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state.py[0m:517 in _getitem                                                        [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mKeyError[0m
+
+[3mDuring handling of the above exception, another exception occurred:[0m
+
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state_proxy.py[0m:130 in __getattr__                                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state_proxy.py[0m:101 in __getitem__                                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1msaf[0m [31m [0m
+[31m [0m [1me_session_state.py[0m:104 in __getitem__                                                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state.py[0m:471 in __getitem__                                                     [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mKeyError: [0m[32m'st.session_state has no key "messages". Did you forget to initialize it? More[0m
+[32minfo: [0m
+[32mhttps://docs.streamlit.io/develop/concepts/architecture/session-state#initialization'[0m
+
+[3mDuring handling of the above exception, another exception occurred:[0m
+
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/scriptrun[0m [31m [0m
+[31m [0m [2mner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling                                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/scriptrun[0m [31m [0m
+[31m [0m [2mner/[0m[1mscript_runner.py[0m:669 in code_to_exec                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/Projects/try_1/[0m[1mapp.py[0m:203 in <module>                          [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m200 [0m[2m│   │   │   │   [0m[94mfrom[0m[90m [0m[4;96msrc[0m[4;96m.[0m[4;96mvisualization[0m[4;96m.[0m[4;96mdiagram_renderer[0m[90m [0m[94mimport[0m extract_json_fr [31m [0m
+[31m [0m   [2m201 [0m[2m│   │   │   │   [0mdata = extract_json_from_llm(simple_json) [95mor[0m raw_data          [31m [0m
+[31m [0m   [2m202 [0m[2m│   │   │   │   [0mhtml = render_from_data(data, title=[33mf[0m[33m"[0m[33m{[0mst.session_state.repo_n [31m [0m
+[31m [0m [31m❱ [0m203 [2m│   │   │   │   [0mst.session_state.messages.append({[33m"[0m[33mrole[0m[33m"[0m: [33m"[0m[33massistant[0m[33m"[0m, [33m"[0m[33mconten[0m [31m [0m
+[31m [0m   [2m204 [0m[2m│   │   │   │   [0mst.rerun()                                                     [31m [0m
+[31m [0m   [2m205 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m   [2m206 [0m[2m│   [0m[94mwith[0m c3:                                                                   [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state_proxy.py[0m:132 in __getattr__                                               [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mAttributeError: [0mst.session_state has no attribute [32m"messages"[0m. Did you forget to 
+initialize it? More info: 
+[4;94mhttps://docs.streamlit.io/develop/concepts/architecture/session-state#initialization[0m
+Repository RAG-Based-GitHub-Code-Analyzer already exists at temp_repos/RAG-Based-GitHub-Code-Analyzer. Skipping clone.
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state.py[0m:469 in __getitem__                                                     [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state.py[0m:517 in _getitem                                                        [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mKeyError[0m
+
+[3mDuring handling of the above exception, another exception occurred:[0m
+
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state_proxy.py[0m:130 in __getattr__                                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state_proxy.py[0m:101 in __getitem__                                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1msaf[0m [31m [0m
+[31m [0m [1me_session_state.py[0m:104 in __getitem__                                                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state.py[0m:471 in __getitem__                                                     [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mKeyError: [0m[32m'st.session_state has no key "messages". Did you forget to initialize it? More[0m
+[32minfo: [0m
+[32mhttps://docs.streamlit.io/develop/concepts/architecture/session-state#initialization'[0m
+
+[3mDuring handling of the above exception, another exception occurred:[0m
+
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/scriptrun[0m [31m [0m
+[31m [0m [2mner/[0m[1mexec_code.py[0m:128 in exec_func_with_error_handling                                [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/scriptrun[0m [31m [0m
+[31m [0m [2mner/[0m[1mscript_runner.py[0m:669 in code_to_exec                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/Projects/try_1/[0m[1mapp.py[0m:232 in <module>                          [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m229 [0m[2m│   [0m                                                                           [31m [0m
+[31m [0m   [2m230 [0m[2m│   [0m[2m# Chat Display[0m                                                             [31m [0m
+[31m [0m   [2m231 [0m[2m│   [0mst.divider()                                                               [31m [0m
+[31m [0m [31m❱ [0m232 [2m│   [0m[94mfor[0m msg [95min[0m st.session_state.messages:                                      [31m [0m
+[31m [0m   [2m233 [0m[2m│   │   [0m[94mwith[0m st.chat_message(msg[[33m"[0m[33mrole[0m[33m"[0m]):                                     [31m [0m
+[31m [0m   [2m234 [0m[2m│   │   │   [0m[94mif[0m msg.get([33m"[0m[33mdiagram_html[0m[33m"[0m):                                        [31m [0m
+[31m [0m   [2m235 [0m[2m│   │   │   │   [0mcomponents.html(msg[[33m"[0m[33mdiagram_html[0m[33m"[0m], height=[94m750[0m, scrolling=[94mTru[0m [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/esraaabdelrazek/.local/lib/python3.9/site-packages/streamlit/runtime/state/[0m[1mses[0m [31m [0m
+[31m [0m [1msion_state_proxy.py[0m:132 in __getattr__                                               [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mAttributeError: [0mst.session_state has no attribute [32m"messages"[0m. Did you forget to 
+initialize it? More info: 
+[4;94mhttps://docs.streamlit.io/develop/concepts/architecture/session-state#initialization[0m
