@@ -1,8 +1,7 @@
-/Assignment_1_Report.md
-/TECH_STACK.md
-/temp_repos
-/vector_stores
-/docs
+docs/
+TECH_STACK.md
+temp_repos/
+vector_stores/
 **/__pycache__
 *.pyc
 *.log
