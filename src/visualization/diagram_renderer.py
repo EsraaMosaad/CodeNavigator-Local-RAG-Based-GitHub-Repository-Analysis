@@ -52,18 +52,17 @@ def build_roadmap_html(data: dict, title: str) -> str:
     for i, n in enumerate(display_nodes):
         ntype = n.get("type", "default")
         icon = icons.get(ntype, icons["default"])
-        color = colors[i % len(colors)]
         label = n.get("label", "Component")
         desc = n.get("description", "")
         
         stations_html += f"""
-        <div class="card-item" style="--accent: {color}">
-            <div class="card-header">
-                <span class="icon">{icon}</span>
-                <span class="step-num">{i+1}</span>
-            </div>
+        <div class="card-item">
+            <div class="badge">{i+1:02d}</div>
             <div class="card-body">
-                <h3>{label}</h3>
+                <div class="card-title">
+                    <span class="icon">{icon}</span>
+                    <h3>{label}</h3>
+                </div>
                 <p>{desc}</p>
             </div>
         </div>
@@ -73,13 +72,13 @@ def build_roadmap_html(data: dict, title: str) -> str:
 <html>
 <head>
     <meta charset="utf-8"/>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <style>
         * {{ margin:0; padding:0; box-sizing:border-box; }}
         body {{ 
-            background: #0D1117; 
-            font-family: 'Outfit', sans-serif; 
-            color: #C9D1D9;
+            background: #0F1629; 
+            font-family: 'Inter', sans-serif; 
+            color: #F8FAFC;
             padding: 30px 40px 100px 40px;
             scroll-behavior: smooth;
             overflow-x: hidden;
@@ -88,93 +87,92 @@ def build_roadmap_html(data: dict, title: str) -> str:
         .header {{
             text-align: left;
             margin-bottom: 40px;
-            border-left: 5px solid #58A6FF;
-            padding-left: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 15px;
             margin-top: 10px;
         }}
         .header h1 {{
-            font-size: 32px;
-            font-weight: 900;
-            color: #F0F6FC;
+            font-size: 28px;
+            font-weight: 700;
+            color: #FFFFFF;
             margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }}
-        .header p {{ color: #8B949E; font-size: 16px; }}
+        .header p {{ color: #94A3B8; font-size: 15px; }}
 
         .roadmap-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
+            gap: 20px;
             position: relative;
             padding-bottom: 60px;
         }}
 
         .card-item {{
-            background: #161B22;
-            border: 1px solid #30363D;
-            border-radius: 20px;
-            overflow: hidden;
-            transition: 0.3s;
+            background: #1E2A45;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: 3px solid #3B82F6;
+            border-radius: 12px;
             position: relative;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            transition: all 0.2s ease;
         }}
         
         .card-item:hover {{
-            transform: translateY(-8px);
-            border-color: var(--accent);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+            transform: translateY(-2px);
+            border-color: rgba(59, 130, 246, 0.5);
+            border-left: 4px solid #3B82F6;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }}
 
-        .card-header {{
-            background: var(--accent);
-            padding: 16px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }}
-        
-        .icon {{ font-size: 28px; }}
-        .step-num {{
-            font-size: 18px;
-            font-weight: 900;
-            color: rgba(0,0,0,0.4);
+        .badge {{
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748B;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 8px;
+            border-radius: 6px;
         }}
 
         .card-body {{
-            padding: 22px;
+            padding: 20px;
             flex-grow: 1;
+            margin-top: 5px;
         }}
 
+        .card-title {{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }}
+
+        .icon {{ font-size: 20px; }}
+
         .card-body h3 {{
-            font-size: 18px;
-            font-weight: 700;
-            color: #F0F6FC;
-            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #FFFFFF;
         }}
 
         .card-body p {{
-            color: #8B949E;
+            color: #94A3B8;
             font-size: 14px;
-            line-height: 1.6;
-        }}
-
-        /* Subtle glow background */
-        .glow {{
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 10% 10%, rgba(88,166,255,0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 90% 90%, rgba(139,92,246,0.05) 0%, transparent 50%);
-            z-index: -1;
-            pointer-events: none;
+            line-height: 1.5;
+            margin-left: 30px;
         }}
     </style>
 </head>
 <body>
-    <div class="glow"></div>
     <div class="header">
-        <h1>{title}</h1>
-        <p>A high-level view of how the system works</p>
+        <h1><span class="icon">🗺️</span> {title}</h1>
+        <p>A high-level logical view of the system architecture</p>
     </div>
 
     <div class="roadmap-grid">

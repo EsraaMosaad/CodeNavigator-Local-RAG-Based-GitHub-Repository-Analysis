@@ -1,0 +1,211 @@
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    /* Full page styling */
+    .stApp {
+        background-color: #0F1629;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .main { 
+        background-color: #0F1629; 
+        color: #FFFFFF; 
+    }
+    
+    /* Typography */
+    h1, h2, h3, h4, h5, h6, p, span, div {
+        font-family: 'Inter', sans-serif;
+    }
+    
+    code, pre {
+        font-family: 'JetBrains Mono', monospace !important;
+    }
+    
+    /* Sidebar styling */
+    [data-testid="stSidebar"] {
+        background-color: #0F1629;
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    [data-testid="stSidebar"] * {
+        color: #FFFFFF !important;
+    }
+
+    /* Primary Initialize Button */
+    .stButton>button[data-testid="baseButton-secondary"]:has(div:contains("✨ Initialize Analysis")) {
+        background-color: #3B82F6 !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .stButton>button[data-testid="baseButton-secondary"]:has(div:contains("✨ Initialize Analysis")):hover {
+        background-color: #2563EB !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+    }
+
+    /* Destructive Clear Cache Button */
+    .stButton>button[data-testid="baseButton-secondary"]:has(div:contains("🗑️ Clear Cache")) {
+        background-color: transparent !important;
+        color: #EF4444 !important;
+        border: 1px solid rgba(239, 68, 68, 0.3) !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .stButton>button[data-testid="baseButton-secondary"]:has(div:contains("🗑️ Clear Cache")):hover {
+        background-color: rgba(239, 68, 68, 0.1) !important;
+        border-color: #EF4444 !important;
+    }
+
+    /* Toolbox Buttons & Popover Button */
+    .stButton>button, div[data-testid="stPopover"]>button { 
+        width: 100% !important; 
+        border-radius: 8px !important; 
+        height: 3em !important; 
+        background-color: transparent !important; 
+        color: #FFFFFF !important; 
+        border: 1px solid #3B82F6 !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .stButton>button:hover, div[data-testid="stPopover"]>button:hover { 
+        background-color: #3B82F6 !important;
+        color: #FFFFFF !important; 
+        transform: translateY(-1px) !important;
+    }
+
+    /* Input styling */
+    .stTextInput>div>div>input {
+        background-color: #1E2A45;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+    
+    .stTextInput>div>div>input:focus {
+        border-color: #3B82F6;
+        box-shadow: 0 0 0 1px #3B82F6;
+    }
+
+    /* Chat message area enhancement */
+    .stChatMessage {
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: #1E2A45;
+    }
+    
+    /* Assistant Chat Message styling */
+    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
+        background: #162035 !important;
+        border-left: 3px solid #3B82F6 !important;
+    }
+    
+    /* Custom AI Avatar */
+    [data-testid="chatAvatarIcon-assistant"] {
+        background-color: transparent !important;
+        position: relative;
+    }
+    [data-testid="chatAvatarIcon-assistant"] svg {
+        display: none !important;
+    }
+    [data-testid="chatAvatarIcon-assistant"]::after {
+        content: 'AI';
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: #3B82F6;
+        color: #FFFFFF;
+        border-radius: 50%;
+    }
+    
+    /* Make text in chat bubbles much clearer and brighter */
+    .stChatMessage [data-testid="stMarkdownContainer"] p,
+    .stChatMessage [data-testid="stMarkdownContainer"] li,
+    .stChatMessage [data-testid="stMarkdownContainer"] a,
+    .stChatMessage [data-testid="stMarkdownContainer"] span {
+        color: #FFFFFF !important;
+        font-size: 15px !important;
+        line-height: 1.6 !important;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .stChatMessage [data-testid="stMarkdownContainer"] h1,
+    .stChatMessage [data-testid="stMarkdownContainer"] h2,
+    .stChatMessage [data-testid="stMarkdownContainer"] h3,
+    .stChatMessage [data-testid="stMarkdownContainer"] h4,
+    .stChatMessage [data-testid="stMarkdownContainer"] strong,
+    .stChatMessage [data-testid="stMarkdownContainer"] em {
+        color: #FFFFFF !important;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    /* Fix bright white bottom bar in Streamlit */
+    div[data-testid="stBottomBlockContainer"], [data-testid="stBottom"] {
+        background-color: #0F1629 !important;
+    }
+
+    [data-testid="stHeader"] {
+        background-color: #0F1629 !important;
+    }
+
+    /* Popover background */
+    div[data-testid="stPopoverBody"] {
+        background-color: #1E2A45 !important;
+        border: 1px solid #2D3F60 !important;
+    }
+    div[data-testid="stPopoverBody"] * {
+        color: #FFFFFF !important;
+    }
+
+    /* Chat Input Bar floating style */
+    [data-testid="stChatInput"] {
+        background-color: #1E2A45 !important;
+        border: 1px solid #2D3F60 !important;
+        border-radius: 24px !important;
+        padding-left: 10px;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    
+    [data-testid="stChatInput"]:focus-within {
+        border-color: #3B82F6 !important;
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.2), 0 4px 20px rgba(0,0,0,0.3) !important;
+    }
+    
+    [data-testid="stChatInput"] * {
+        color: #FFFFFF !important;
+    }
+    
+    [data-testid="stChatInput"] textarea::placeholder {
+        color: #6B7FA3 !important;
+    }
+
+    /* Send button */
+    [data-testid="stChatInputSubmitButton"] {
+        color: #3B82F6 !important;
+    }
+
+    /* Dividers */
+    hr {
+        border-color: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    [data-testid="block-container"] {
+        padding-top: 2rem !important;
+    }
