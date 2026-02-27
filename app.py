@@ -3,6 +3,7 @@ import sys
 sys.modules['sqlite3'] = pysqlite3
 
 import streamlit as st
+import streamlit.components.v1 as components
 import os
 import json
 import requests
@@ -12,99 +13,35 @@ from src.embeddings.hf_embeddings import HFEmbeddings
 from src.vectorstore.chroma_manager import ChromaManager
 from src.models.ollama_client import OllamaModel
 from src.rag.pipeline import RAGPipeline
-from src.visualization.diagram_renderer import render_architecture_diagram, render_from_data
+from src.visualization.diagram_renderer import render_from_data
 from src.visualization.repo_scanner import scan_repo
-from langchain.callbacks.base import BaseCallbackHandler
-import re
-import streamlit.components.v1 as components
-
-class StreamHandler(BaseCallbackHandler):
-    def __init__(self, container, initial_text=""):
-        self.container = container
-        self.text = initial_text
-
-    def on_llm_new_token(self, token: str, **kwargs) -> None:
-        self.text += token
-        self.container.markdown(self.text + "▌")
-
-def sanitize_mermaid(code: str) -> str:
-    """Fix common LLM mistakes in mermaid syntax."""
-    # Remove any lingering markdown blocks inside the content
-    code = re.sub(r'```mermaid\n?|```', '', code, flags=re.IGNORECASE)
-    # Fix unquoted brackets/parens in node names (very common error)
-    # This is a simple heuristic: if a line looks like Node[Name], wrap it
-    lines = []
-    for line in code.split('\n'):
-        # Escape any potential HTML characters that might break the <pre> tag
-        clean_line = line.replace('<', '&lt;').replace('>', '&gt;')
-        lines.append(clean_line)
-    return '\n'.join(lines).strip()
-
-def render_mermaid(answer: str):
-    """Parses text and renders both markdown parts and visual Mermaid diagrams in their original order."""
-    mermaid_pattern = re.compile(r"(```mermaid\s*[\s\S]*?```)", re.IGNORECASE)
-    parts = mermaid_pattern.split(answer)
-    
-    diagram_count = 0
-    for part in parts:
-        if part.lower().strip().startswith("```mermaid"):
-            # This is a mermaid block
-            diagram_code = re.sub(r"```mermaid\s*|```", "", part, flags=re.IGNORECASE).strip()
-            sanitized_code = sanitize_mermaid(diagram_code)
-            html = f"""
-            <!DOCTYPE html>
-            <html>
-            <head>
-            <style>
-              body, html {{ margin:0; padding:0; background:transparent; overflow:hidden; font-family:'Inter', sans-serif; }}
-              .wrap {{ 
-                background: #111118; 
-                border: 1px solid rgba(255,255,255,0.08); 
-                border-radius: 12px; 
-                padding: 30px; 
-                margin: 10px 0;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-              }}
-              .mermaid {{ visibility: hidden; }}
-              .mermaid[data-processed="true"] {{ visibility: visible; }}
-            </style>
-            </head>
-            <body>
-              <div class="wrap">
-                <pre class="mermaid">
-{sanitized_code}
-                </pre>
-              </div>
-              <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-              <script>
-                mermaid.initialize({{ 
-                  startOnLoad: true, 
-                  theme: 'dark',
-                  securityLevel: 'loose',
-                  themeVariables: {{
-                    primaryColor: '#6366F1',
-                    primaryTextColor: '#FAFAFA',
-                    lineColor: '#A5B4FC',
-                    mainBkg: '#18181B',
-                    nodeBorder: 'rgba(255,255,255,0.1)'
-                  }}
-                }});
-              </script>
-            </body></html>
-            """
-            components.html(html, height=450, scrolling=True)
-            diagram_count += 1
-        elif part.strip():
-            # This is regular markdown text
-            st.markdown(part)
-    return diagram_count > 0
+from src.ui.components import render_mermaid, render_sidebar_branding, render_hero
+from src.utils.handlers import StreamHandler
 
 # Page Config
-st.set_page_config(page_title="CodeNavigator AI", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="CodeNavigator", page_icon="⚡", layout="wide")
 
 # Load CSS
 with open("assets/style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+@st.cache_resource
+def get_managers():
+    """Load and cache heavy resources like LLMs and Embeddings."""
+    return {
+        "loader": GitLoader(),
+        "parser": PythonParser(),
+        "embeddings": HFEmbeddings(),
+        "vector": ChromaManager(),
+        "llm": OllamaModel(model_name="deepseek-coder-v2:lite")
+    }
+
+managers = get_managers()
+loader = managers["loader"]
+parser = managers["parser"]
+embeddings_manager = managers["embeddings"]
+vector_manager = managers["vector"]
+llm_manager = managers["llm"]
 
 # Initialize Components
 loader = GitLoader()
@@ -121,18 +58,7 @@ def check_ollama():
 
 with st.sidebar:
     # ── Logo / Header (Persistent)
-    st.markdown("""
-    <div style="display:flex; align-items:center; gap:10px; padding:16px 4px 12px;">
-        <div style="width:32px; height:32px; background:linear-gradient(135deg,#6366F1,#8B5CF6);
-                    border-radius:8px; display:flex; align-items:center; justify-content:center;
-                    font-size:16px;">⚡</div>
-        <div>
-            <div style="color:#FAFAFA; font-weight:700; font-size:14px; line-height:1;">CodeNavigator</div>
-            <div style="color:#71717A; font-size:11px; margin-top:2px;">AI Code Analyst</div>
-        </div>
-    </div>
-    <hr style="border:none; border-top:1px solid rgba(255,255,255,0.07); margin:0 0 16px 0;">
-    """, unsafe_allow_html=True)
+    render_sidebar_branding()
 
     # ── Ollama status
     if check_ollama():
@@ -154,32 +80,42 @@ with st.sidebar:
             <span style="color:#EF4444; font-size:12px; font-weight:600;">Ollama Offline</span>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("↻  Reconnect", use_container_width=True): st.rerun()
+        if st.button("Reconnect", icon=":material/refresh:", use_container_width=True): st.rerun()
 
     # ── Repository section
     st.markdown("<p style='color:#52525B; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin:10px 0 6px;'>Repository</p>", unsafe_allow_html=True)
     repo_url = st.text_input("Git URL", placeholder="https://github.com/user/repo", label_visibility="collapsed")
-    process_button = st.button("✨  Initialize Analysis", use_container_width=True)
+    process_button = st.button("Initialize Analysis", icon=":material/analytics:", use_container_width=True)
 
     # Process repository
     if process_button and repo_url:
         repo_name = repo_url.split("/")[-1].replace(".git", "")
         with st.status(f"Scanning {repo_name}...", expanded=True) as status:
-            st.write("📥 Cloning repository...")
-            repo_path = loader.load(repo_url, "temp_repos")
-            st.session_state.repo_path = repo_path
-            st.write("🔍 Building knowledge graph...")
-            embedding_fn = embeddings_manager.get_embedding_function()
-            vector_store = vector_manager.create_or_load(None, repo_name, embedding_fn)
-            if not vector_store:
-                texts = parser.parse_and_split(repo_path)
-                if texts:
-                    vector_store = vector_manager.create_or_load(texts, repo_name, embedding_fn)
+            try:
+                repo_path = loader.load(repo_url, "temp_repos")
+                st.session_state.repo_path = repo_path
+                st.write("Building knowledge graph...")
+                embedding_fn = embeddings_manager.get_embedding_function()
+                vector_store = vector_manager.create_or_load(None, repo_name, embedding_fn)
+                if not vector_store:
+                    texts = parser.parse_and_split(repo_path)
+                    if texts:
+                        vector_store = vector_manager.create_or_load(texts, repo_name, embedding_fn)
+            except Exception as e:
+                st.error(str(e))
+                vector_store = None
             if vector_store:
+                # Reset session state for the new project to prevent context leakage
+                if "repo_name" in st.session_state and st.session_state.repo_name != repo_name:
+                    keys_to_reset = ["pipeline", "messages", "branches", "pending_action", "pending_branches"]
+                    for key in keys_to_reset:
+                        if key in st.session_state:
+                            del st.session_state[key]
+                
                 st.session_state.vector_store = vector_store
                 st.session_state.processed = True
                 st.session_state.repo_name = repo_name
-                status.update(label="✅ Ready!", state="complete", expanded=False)
+                status.update(label="Ready!", state="complete", expanded=False)
 
     # ── Active repo badge (only when loaded)
     if st.session_state.get("processed"):
@@ -187,7 +123,7 @@ with st.sidebar:
         <div style="background:rgba(99,102,241,0.08); border:1px solid rgba(99,102,241,0.25);
                     border-radius:10px; padding:12px 14px; margin-top:14px;">
             <div style="color:#A5B4FC; font-size:10px; font-weight:700; text-transform:uppercase;
-                        letter-spacing:0.08em; margin-bottom:5px;">🔎 Exploring</div>
+                        letter-spacing:0.08em; margin-bottom:5px;">Exploring</div>
             <div style="color:#6366F1; font-family:'JetBrains Mono',monospace; font-size:12px;
                         font-weight:600; white-space:nowrap; overflow:hidden;
                         text-overflow:ellipsis; margin-bottom:8px;">{st.session_state.repo_name}</div>
@@ -204,14 +140,14 @@ with st.sidebar:
         
         t_col1, t_col2 = st.columns(2)
         with t_col1:
-            if st.button("📝 Summary", use_container_width=True):
+            if st.button("Summary", icon=":material/description:", use_container_width=True):
                 st.session_state.pending_action = "summarize"; st.rerun()
-            if st.button("🗺️ Roadmap", use_container_width=True):
+            if st.button("Roadmap", icon=":material/account_tree:", use_container_width=True):
                 st.session_state.pending_action = "roadmap"; st.rerun()
         with t_col2:
-            if st.button("🚩 Issues", use_container_width=True):
+            if st.button("Issues", icon=":material/report_problem:", use_container_width=True):
                 st.session_state.pending_action = "issues"; st.rerun()
-            with st.popover("🔀 Diff", use_container_width=True):
+            with st.popover("Diff", icon=":material/compare_arrows:", use_container_width=True):
                 if "repo_path" not in st.session_state:
                     st.error("Repository path not found.")
                 else:
@@ -236,7 +172,7 @@ with st.sidebar:
 
     # ── Session section (bottom)
     st.markdown("<p style='color:#52525B; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin:18px 0 6px;'>Session</p>", unsafe_allow_html=True)
-    if st.button("🗑️  Clear Cache", use_container_width=True):
+    if st.button("Clear Cache", icon=":material/delete_sweep:", use_container_width=True):
         import shutil
         try:
             chromadb.api.client.SharedSystemClient.clear_system_cache()
@@ -251,15 +187,18 @@ with st.sidebar:
 if "messages" not in st.session_state: st.session_state.messages = []
 
 if st.session_state.get("processed"):
-    if "branches" not in st.session_state:
-        st.session_state.branches = loader.get_branches(st.session_state.repo_path)
+    if "pipeline" not in st.session_state:
+        repo_context = {
+            "Repository Name": st.session_state.repo_name,
+            "Available Branches": ", ".join(st.session_state.branches) if st.session_state.branches else "Unknown"
+        }
+        st.session_state.pipeline = RAGPipeline(
+            llm_manager.get_llm(), 
+            st.session_state.vector_store.as_retriever(), 
+            repo_context
+        )
     
-    repo_context = {
-        "Repository Name": st.session_state.repo_name,
-        "Available Branches": ", ".join(st.session_state.branches) if st.session_state.branches else "Unknown"
-    }
-
-    pipeline = RAGPipeline(llm_manager.get_llm(), st.session_state.vector_store.as_retriever(), repo_context)
+    pipeline = st.session_state.pipeline
     
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
@@ -281,7 +220,7 @@ if st.session_state.get("processed"):
                 content = msg["content"]
                 render_mermaid(content)
             if msg.get("sources"):
-                with st.expander("📎 Sources"):
+                with st.expander("Sources"):
                     for doc in msg["sources"]: st.code(doc.page_content, language="python")
 
     # Process pending actions at the bottom of the chat
@@ -397,29 +336,5 @@ if st.session_state.get("processed"):
             })
             if has_diagram: st.rerun() # Refresh to trigger visual render
 else:
-    st.markdown("""
-    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;
-                padding:80px 20px; text-align:center;">
-        <div style="width:64px; height:64px; background:linear-gradient(135deg,#6366F1,#8B5CF6);
-                    border-radius:16px; display:flex; align-items:center; justify-content:center;
-                    font-size:28px; margin-bottom:20px; box-shadow:0 0 30px rgba(99,102,241,0.3);">⚡</div>
-        <h2 style="color:#FAFAFA; font-family:'Inter',sans-serif; font-weight:700;
-                   font-size:22px; margin:0 0 8px; letter-spacing:-0.3px;">Ready to explore any codebase</h2>
-        <p style="color:#71717A; font-size:14px; max-width:400px; line-height:1.6; margin:0 0 28px;">
-            Paste a GitHub URL in the sidebar and click
-            <strong style='color:#A5B4FC;'>Initialize Analysis</strong>
-            to start a deep-dive into any repository.
-        </p>
-        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
-            <div style="background:#111118; border:1px solid rgba(255,255,255,0.07); border-radius:8px;
-                        padding:10px 16px; font-size:13px; color:#A1A1AA;">📝 Summarize codebase</div>
-            <div style="background:#111118; border:1px solid rgba(255,255,255,0.07); border-radius:8px;
-                        padding:10px 16px; font-size:13px; color:#A1A1AA;">🚩 Find code issues</div>
-            <div style="background:#111118; border:1px solid rgba(255,255,255,0.07); border-radius:8px;
-                        padding:10px 16px; font-size:13px; color:#A1A1AA;">🗺️ Map architecture</div>
-            <div style="background:#111118; border:1px solid rgba(255,255,255,0.07); border-radius:8px;
-                        padding:10px 16px; font-size:13px; color:#A1A1AA;">💬 Chat with the code</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    render_hero()
     st.chat_input("Enter a GitHub URL in the sidebar to begin...", disabled=True)

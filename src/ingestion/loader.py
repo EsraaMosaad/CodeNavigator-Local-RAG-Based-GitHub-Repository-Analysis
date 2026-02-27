@@ -13,7 +13,11 @@ class GitLoader(BaseLoader):
             return repo_full_path
             
         print(f"Cloning {repo_url} to {repo_full_path}...")
-        Repo.clone_from(repo_url, repo_full_path)
+        try:
+            Repo.clone_from(repo_url, repo_full_path)
+        except Exception as e:
+            if os.path.exists(repo_full_path): shutil.rmtree(repo_full_path)
+            raise ValueError(f"Failed to clone repository. Ensure it's a valid public base Git URL. (Error: {str(e)})")
         return repo_full_path
 
     def get_branches(self, repo_path: str):

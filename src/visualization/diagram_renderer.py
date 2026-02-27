@@ -5,7 +5,7 @@ from typing import Optional, List, Dict
 
 
 def extract_json_from_llm(text: str) -> Optional[dict]:
-    """Try to extract a JSON block from LLM output."""
+    """Try to extract a JSON block from system output."""
     json_block = re.search(r"```json\s*([\s\S]*?)```", text, re.IGNORECASE)
     if json_block:
         raw = json_block.group(1).strip()
@@ -32,14 +32,14 @@ def build_roadmap_html(data: dict, title: str) -> str:
 
     # Define icons based on type
     icons = {
-        "entry": "🚀",
-        "module": "📦",
-        "class": "🏗️",
-        "function": "⚙️",
-        "database": "💾",
-        "external": "🌐",
-        "test": "🧪",
-        "default": "🔹"
+        "entry": "●",
+        "module": "○",
+        "class": "■",
+        "function": "□",
+        "database": "◆",
+        "external": "◇",
+        "test": "△",
+        "default": "•"
     }
     
     colors = ["#FF6B6B", "#4D96FF", "#6BCB77", "#FFD93D", "#9D174D", "#9B59B6", "#F0A500"]
@@ -171,7 +171,7 @@ def build_roadmap_html(data: dict, title: str) -> str:
 </head>
 <body>
     <div class="header">
-        <h1><span class="icon">🗺️</span> {title}</h1>
+        <h1><span class="icon"></span> {title}</h1>
         <p>A high-level logical view of the system architecture</p>
     </div>
 
@@ -180,12 +180,6 @@ def build_roadmap_html(data: dict, title: str) -> str:
     </div>
 </body>
 </html>"""
-
-
-def render_architecture_diagram(llm_answer: str, title: str = "Project Roadmap") -> Optional[str]:
-    data = extract_json_from_llm(llm_answer)
-    if not data or "nodes" not in data: return None
-    return build_roadmap_html(data, title)
 
 
 def render_from_data(data: dict, title: str = "Project Roadmap") -> Optional[str]:

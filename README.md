@@ -1,71 +1,58 @@
-# RAG-Based GitHub Code Analyzer 🚀
+# CodeNavigator: Technical Repository Analysis
 
-A fully local, privacy-first system to analyze public GitHub Python repositories using Retrieval-Augmented Generation (RAG). This project was built for a university demonstration to showcase local LLM capabilities in software engineering.
+A professional-grade, local repository analysis system leveraging Retrieval-Augmented Generation (RAG) for deep-dive codebase exploration. This platform enables secure, offline analysis of Python projects using local large language models.
 
-## 🎯 Project Goal
-This project aims to build a **local RAG-based system** that analyzes GitHub repositories to:
-1.  **Generate meaningful GitHub issues** (bugs, refactoring, security).
-2.  **Perform code diff analysis** against external logic.
-3.  **Summarize source code** with visual diagrams (Mermaid.js).
+## Project Objectives
+This system provides an automated framework for repository intelligence, focusing on:
+1.  **Issue Identification**: Detection of potential logic flaws, refactoring opportunities, and security considerations.
+2.  **Logic Synchronization**: Comparative analysis between different code versions and branches.
+3.  **Architectural Mapping**: Generation of high-level system overviews and component diagrams.
 
-The system retrieves and reasons over code using vector databases and large language models to highlight changes, detect potential issues, and improve code understanding, providing practical experience in RAG pipelines and AI-assisted software analysis.
+The infrastructure ensures data sovereignty by processing all information locally, utilizing advanced vector search and optimized inference engines.
 
-## 🌟 Features
-- **Local Ingestion**: Clone any public GitHub repository directly.
-- **Semantic Code Splitting**: Uses AST-aware parsing to maintain function and class context.
-- **Local Embeddings**: Powered by `sentence-transformers/all-MiniLM-L6-v2` (runs on CPU).
-- **Vector Storage**: Uses `ChromaDB` for fast, local similarity search.
-- **Local LLM**: Integrated with `Ollama` using the `deepseek-coder-v2:lite` model.
-- **Specialized Tools**:
-    - **📝 Summarize Code**: High-level architecture + Class Diagrams.
-    - **🐛 Generate Issues**: Auto-drafts GitHub issues for bugs/improvements.
-    - **📊 Visual Diagrams**: Flowcharts and Sequence Diagrams.
-    - **🔍 Code Diff**: Compare external snippets with repo logic.
+## Key Capabilities
+- **On-Demand Indexing**: Direct integration with Git for repository cloning and processing.
+- **Structural Code Analysis**: Abstract Syntax Tree (AST) optimized parsing for high-context retrieval.
+- **Optimized Vector Search**: Enterprise-ready storage using ChromaDB for sub-second retrieval performance.
+- **Secure Local Inference**: Integration with Ollama for privacy-focused language processing.
+- **Advanced Visualization**: Dynamic generation of Mermaid.js architecture and class diagrams.
 
-## 🏗️ Architecture
-The system follows a standard RAG pipeline:
-1. **Load**: Clone repo and load `.py` files.
-2. **Split**: Break code into semantic chunks.
-3. **Embed**: Convert chunks into vectors.
-4. **Store**: Save vectors in ChromaDB.
-5. **Retrieve**: Find relevant code snippets based on user query.
-6. **Generate**: Use Ollama to generate a technical answer based on retrieved context.
+## System Architecture
+The platform implements a multi-stage RAG pipeline:
+1. **Ingestion**: Automated cloning and file traversal.
+2. **Standardization**: Semantic splitting of source code into discrete units.
+3. **Representation**: High-dimensional vector embedding for semantic search.
+4. **Knowledge Storage**: Persistent indexing in a centralized vector store.
+5. **Retrieval & Synthesis**: Context-aware retrieval followed by technical response generation.
 
-## 🛠️ Setup Instructions
+## Implementation Guide
 
-### 1. Prerequisites
-- Python 3.9+
-- [Ollama](https://ollama.com/) (Must be installed and running)
+### 1. Requirements
+- Python 3.9 or higher
+- Ollama Service (Running locally)
 
-### 2. Install Dependencies
+### 2. Dependency Management
+Install the required software components using the project manifest:
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Pull the Local LLM
-Open your terminal and run:
+### 3. Engine Configuration
+Ensure the required model is available in your local environment:
 ```bash
 ollama pull deepseek-coder-v2:lite
 ```
 
-### 4. Run the Application
+### 4. System Launch
+Initialize the analytics interface:
 ```bash
 streamlit run app.py
 ```
 
-## 📖 Usage
-1. Enter a public GitHub URL (e.g., `https://github.com/psf/requests`).
-2. Click **Process Repository** and wait for the indexing to complete.
-3. Ask questions like:
-   - "How does the authentication logic work?"
-   - "Summarize the main entry point of the application."
-   - "Are there any potential security issues in the file handling?"
+## Functional Overview
+1. Provide a public GitHub repository URI.
+2. Execute **Initialize Analysis** to begin background indexing.
+3. Utilize the analytical tools to query the system for architectural summaries, issue tracking, or logic verification.
 
-## 🎓 Academic Justification
-- **Privacy**: No data leaves the local machine.
-- **Reproducibility**: Uses open-source tools and models.
-- **Cost**: Completely free to run.
-- **Technical Depth**: Demonstrates integration of AST parsing, vector databases, and LLM orchestration.
-
----
-Built with ❤️ for University Project.
+## Disclaimer
+This system is designed for secure, local-only processing. No data is transmitted to external telemetry or third-party APIs during the standard analysis workflows.

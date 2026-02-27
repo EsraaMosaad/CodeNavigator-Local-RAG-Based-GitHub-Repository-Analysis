@@ -73,7 +73,7 @@ Node type guide:
 - class: an important class
 - function: a key standalone function
 - database: vector store, DB, file storage
-- external: external APIs, services, LLMs
+- external: external APIs, services, or data providers
 
 Include 8-15 nodes and all important relationships. Be concise.""",
             "diff": f"You are analyzing a Git Diff between two branches. Below is the raw diff output:\n\n{extra_context}\n\nTasks:\n1. Summarize the key changes (files modified, added, removed).\n2. Explain the logic changes in plain English.\n3. Identify any potential bugs or security risks introduced by these changes."

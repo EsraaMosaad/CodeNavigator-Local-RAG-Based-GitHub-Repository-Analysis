@@ -83,11 +83,15 @@ pre,
 [data-testid="stSidebar"] {
     background-color: var(--bg-raised) !important;
     border-right: 1px solid var(--border) !important;
+}
+
+/* Aggressively pull sidebar content to the top */
+[data-testid="stSidebarContent"] {
     padding-top: 0 !important;
 }
 
-[data-testid="stSidebar"]>div:first-child {
-    padding-top: 1rem;
+[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
+    padding-top: 0 !important;
 }
 
 /* All sidebar text */
