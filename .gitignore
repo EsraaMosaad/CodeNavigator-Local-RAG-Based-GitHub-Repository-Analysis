@@ -3,6 +3,9 @@
 /temp_repos
 /vector_stores
 /docs
-/__pycache__
-*.pycapp.log
+**/__pycache__
+*.pyc
+*.log
 .env
+.streamlit
+app.log
