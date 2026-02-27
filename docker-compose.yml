@@ -1,0 +1,19 @@
+services:
+  codenavigator:
+    image: esraaabdelrazek012/codenavigator:latest
+    container_name: codenavigator
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./vector_stores:/app/vector_stores
+      - ./temp_repos:/app/temp_repos
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - OLLAMA_HOST=http://host.docker.internal:11434
+    restart: unless-stopped
+
+networks:
+  default:
+    name: codenavigator_network
+    driver: bridge

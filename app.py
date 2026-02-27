@@ -92,14 +92,18 @@ with st.sidebar:
         repo_name = repo_url.split("/")[-1].replace(".git", "")
         with st.status(f"Scanning {repo_name}...", expanded=True) as status:
             try:
+                st.write("Cloning repository...")
                 repo_path = loader.load(repo_url, "temp_repos")
                 st.session_state.repo_path = repo_path
-                st.write("Building knowledge graph...")
+                
                 embedding_fn = embeddings_manager.get_embedding_function()
                 vector_store = vector_manager.create_or_load(None, repo_name, embedding_fn)
+                
                 if not vector_store:
+                    st.write("Parsing AST and extracting structural context...")
                     texts = parser.parse_and_split(repo_path)
                     if texts:
+                        st.write("Generating embeddings and building knowledge graph...")
                         vector_store = vector_manager.create_or_load(texts, repo_name, embedding_fn)
             except Exception as e:
                 st.error(str(e))
@@ -257,27 +261,27 @@ if st.session_state.get("processed"):
                     st.error("Repo path not found.")
                 else:
                     raw_data = scan_repo(repo_path)
-                    qwen_llm = OllamaModel(model_name="qwen2.5-coder:7b").get_llm(temperature=0.1)
+                    lite_llm = OllamaModel(model_name="deepseek-coder-v2:lite").get_llm(temperature=0.1)
                     repo_name_context = st.session_state.repo_name
+                    
+                    # Simplify raw data to reduce tokens and speed up inference
+                    simplified_context = {
+                        "modules": [{"id": n["id"], "type": n["type"], "hint": n["description"][:100]} 
+                                    for n in raw_data["nodes"] if n["type"] in ("entry", "module")]
+                    }
+                    
                     prompt = f"""
-                    You are a Software Architect explaining the "{repo_name_context}" project to a NON-TECHNICAL person.
-                    I will give you raw data from a code scan (JSON). 
-                    Your goal is to create a HUMAN-FRIENDLY roadmap of the 6-8 most important components.
+                    You are a Software Architect explaining the "{repo_name_context}" project.
+                    Summarize the architecture into 6-8 core components.
                     
-                    RULES:
-                    1. BE SPECIFIC. Use "{repo_name_context}" and actual folder names in your labels. 
-                    2. Use the "description" field as your source of truth.
-                    3. Combine files from the same folder into ONE component.
-                    4. Output EXACTLY 6-8 nodes.
-                    
-                    Raw Data: {json.dumps(raw_data)}
+                    Context Data: {json.dumps(simplified_context)}
                     
                     Return ONLY a JSON with this structure:
                     {{
-                      "nodes": [ {{"id": "id", "label": "{repo_name_context} Module", "type": "entry|module|database|external", "description": "What this specific part does for the user"}} ]
+                      "nodes": [ {{"id": "id", "label": "Component Name", "type": "entry|module|database|external", "description": "Purpose"}} ]
                     }}
                     """
-                    simple_json_str = qwen_llm.invoke(prompt)
+                    simple_json_str = lite_llm.invoke(prompt)
                     from src.visualization.diagram_renderer import extract_json_from_llm
                     simplified_data = extract_json_from_llm(simple_json_str) or raw_data
                     diagram_html = render_from_data(simplified_data, title=f"{st.session_state.repo_name} — Visual Map")
