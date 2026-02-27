@@ -1,6 +1,8 @@
 import os
 import re
+import shutil
 import chromadb
+from chromadb.config import Settings
 from langchain_chroma import Chroma
 from src.core.base import BaseVectorStore
 
@@ -13,16 +15,25 @@ class ChromaManager(BaseVectorStore):
         if len(clean_name) < 3: clean_name = f"repo_{clean_name}"
         return clean_name
 
+    def _fresh_client(self, path: str) -> chromadb.PersistentClient:
+        """Always return a fresh PersistentClient, resetting any cached singleton state."""
+        try:
+            chromadb.api.client.SharedSystemClient.clear_system_cache()
+        except Exception:
+            pass
+        os.makedirs(path, exist_ok=True)
+        # allow_reset=True lets chromadb recover from a dirty/partial state
+        settings = Settings(allow_reset=True, anonymized_telemetry=False)
+        return chromadb.PersistentClient(path=path, settings=settings)
+
     def create_or_load(self, texts, repo_name: str, embedding_function) -> Chroma:
         clean_name = self._sanitize_name(repo_name)
         repo_db_path = os.path.join(self.base_path, clean_name)
-        
-        # Check if vector store already exists for this repo
+
         exists = os.path.exists(repo_db_path)
-        
+
         if texts and not exists:
-            os.makedirs(repo_db_path, exist_ok=True)
-            client = chromadb.PersistentClient(path=repo_db_path)
+            client = self._fresh_client(repo_db_path)
             return Chroma.from_documents(
                 documents=texts,
                 embedding=embedding_function,
@@ -30,7 +41,7 @@ class ChromaManager(BaseVectorStore):
                 collection_name=clean_name
             )
         elif exists:
-            client = chromadb.PersistentClient(path=repo_db_path)
+            client = self._fresh_client(repo_db_path)
             return Chroma(
                 client=client,
                 embedding_function=embedding_function,
