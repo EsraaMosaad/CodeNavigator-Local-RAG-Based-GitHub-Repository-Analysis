@@ -120,20 +120,19 @@ def check_ollama():
         return False
 
 with st.sidebar:
-    # ── Logo / Header (Only when NO repo is loaded)
-    if not st.session_state.get("processed"):
-        st.markdown("""
-        <div style="display:flex; align-items:center; gap:10px; padding:16px 4px 12px;">
-            <div style="width:32px; height:32px; background:linear-gradient(135deg,#6366F1,#8B5CF6);
-                        border-radius:8px; display:flex; align-items:center; justify-content:center;
-                        font-size:16px;">⚡</div>
-            <div>
-                <div style="color:#FAFAFA; font-weight:700; font-size:14px; line-height:1;">CodeNavigator</div>
-                <div style="color:#71717A; font-size:11px; margin-top:2px;">AI Code Analyst</div>
-            </div>
+    # ── Logo / Header (Persistent)
+    st.markdown("""
+    <div style="display:flex; align-items:center; gap:10px; padding:16px 4px 12px;">
+        <div style="width:32px; height:32px; background:linear-gradient(135deg,#6366F1,#8B5CF6);
+                    border-radius:8px; display:flex; align-items:center; justify-content:center;
+                    font-size:16px;">⚡</div>
+        <div>
+            <div style="color:#FAFAFA; font-weight:700; font-size:14px; line-height:1;">CodeNavigator</div>
+            <div style="color:#71717A; font-size:11px; margin-top:2px;">AI Code Analyst</div>
         </div>
-        <hr style="border:none; border-top:1px solid rgba(255,255,255,0.07); margin:0 0 12px 0;">
-        """, unsafe_allow_html=True)
+    </div>
+    <hr style="border:none; border-top:1px solid rgba(255,255,255,0.07); margin:0 0 16px 0;">
+    """, unsafe_allow_html=True)
 
     # ── Ollama status
     if check_ollama():

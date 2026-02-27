@@ -138,9 +138,21 @@ pre,
     box-shadow: 0 0 0 1px var(--accent) !important;
 }
 
-.stButton>button:active {
+.stButton>button:active,
+.stButton>button:focus,
+.stButton>button:active * {
     transform: scale(0.98) !important;
-    background-color: var(--accent-soft) !important;
+    background-color: var(--bg-hover) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--accent) !important;
+}
+
+/* Ensure emojis/icons don't disappear on click */
+.stButton>button p,
+.stButton>button span,
+.stButton>button div {
+    color: var(--text-primary) !important;
+    transition: none !important;
 }
 
 /* Popover trigger button — force dark style to match sidebar ghost buttons */
