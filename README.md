@@ -4,6 +4,9 @@ A professional-grade, local repository analysis system leveraging Retrieval-Augm
 
 **Developed by: Esraa & Nancy**
 
+<img width="1600" height="662" alt="image" src="https://github.com/user-attachments/assets/8a0c0cde-8f72-412e-9283-ff67b32f112f" />
+
+
 ## Project Objectives
 This system provides an automated framework for repository intelligence, focusing on:
 1.  **Issue Identification**: Detection of potential logic flaws, refactoring opportunities, and security considerations.
@@ -11,6 +14,9 @@ This system provides an automated framework for repository intelligence, focusin
 3.  **Architectural Mapping**: Generation of high-level system overviews and component diagrams.
 
 The infrastructure ensures data sovereignty by processing all information locally, utilizing advanced vector search and optimized inference engines.
+
+<img width="1600" height="662" alt="image" src="https://github.com/user-attachments/assets/794727f1-b9e2-4142-9c0a-b0e77113cfa6" />
+
 
 ## Key Capabilities
 - **On-Demand Indexing**: Direct integration with Git for repository cloning and processing.
