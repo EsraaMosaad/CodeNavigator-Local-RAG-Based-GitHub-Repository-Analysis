@@ -15,7 +15,7 @@ This system provides an automated framework for repository intelligence, focusin
 
 The infrastructure ensures data sovereignty by processing all information locally, utilizing advanced vector search and optimized inference engines.
 
-<img width="1600" height="662" alt="image" src="https://github.com/user-attachments/assets/794727f1-b9e2-4142-9c0a-b0e77113cfa6" />
+<img width="1600" height="670" alt="image" src="https://github.com/user-attachments/assets/e0b8effe-e509-46e9-afef-2e9c7343e21b" />
 
 
 ## Key Capabilities
