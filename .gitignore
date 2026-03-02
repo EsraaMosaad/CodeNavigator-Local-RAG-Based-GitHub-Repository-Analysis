@@ -5,6 +5,7 @@ vector_stores/
 **/__pycache__
 *.pyc
 *.log
-.env
 .streamlit
 app.log
+config.bat
+node_modules
